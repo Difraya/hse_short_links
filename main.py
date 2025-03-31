@@ -3,7 +3,6 @@ from routers import auth, links
 import uvicorn
 from schemas.auth import UserCreate, UserRead, UserUpdate
 from managers import fastapi_users, auth_backend
-from config import SECRET
 
 app = FastAPI()
 

@@ -32,12 +32,17 @@ def delete_expired_links():
     import asyncio
 
     async def _delete():
-        async with get_async_session() as session:
+        session_generator = get_async_session()
+        session = await anext(session_generator)
+
+        try:
             result = await session.execute(select(Links))
             links = result.scalars().all()
             for link in links:
                 if link.expires_at and datetime.now(timezone.utc) > link.expires_at:
                     await session.delete(link)
             await session.commit()
+        finally:
+            await session.close()
 
     asyncio.run(_delete())

@@ -45,7 +45,6 @@ def generate_code(length: int = 6) -> str:
 async def create_short_link(data, db: AsyncSession) -> str:
     code = data.custom_alias or generate_code()
 
-    # проверка на уникальность
     existing = await db.execute(select(Links).where(Links.short_url == code))
     if existing.scalar_one_or_none():
         raise ValueError("Этот короткий код уже занят")
